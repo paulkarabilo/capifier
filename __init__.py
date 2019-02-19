@@ -25,17 +25,17 @@ bl_info = {
 
 if "bpy" in locals():
     import importlib
-    importlib.reload(capifier)
+    importlib.reload(ui)
 else:
-    from capifier import capifier
+    from capifier import ui
 
 import bpy
 
 def register():
-    capifier.register()
+    ui.register()
 
 def unregister():
-    capifier.unregister()
+    ui.unregister()
 
 if __name__ == "__main__":
     register()
