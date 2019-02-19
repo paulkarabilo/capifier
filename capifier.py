@@ -71,7 +71,25 @@ def capify(f, bm):
     bpy.ops.mesh.select_mode(type='FACE', use_extend=True)
 
 
-class Capifier(bpy.types.Operator):
+class ObjectCapifier(bpy.types.Operator):
+    bl_idname = "object.capify"
+    bl_label = "Capify"
+    bl_context = "objectmode"
+    bl_description = "Add proper topology to cylinder object caps"
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        ob = context.active_object
+        return (ob and ob.type == 'MESH')
+
+    def execute(self, context):
+        bpy.ops.object.mode_set(mode="EDIT")
+        bm = bmesh.from_edit_mesh(context.active_object.data)
+        return {'FINISHED'}
+
+
+class FaceCapifier(bpy.types.Operator):
     bl_idname = "mesh.capify"
     bl_label = "Capify"
     bl_context = "mesh_edit"
@@ -95,22 +113,29 @@ def special_menu_func(self, context):
     is_face_mode = context.tool_settings.mesh_select_mode[2]
     if is_face_mode:
         self.layout.separator()
-        self.layout.operator("mesh.capify")
+        self.layout.operator(FaceCapifier.bl_idname)
 
 def face_menu_func(self, context):
     self.layout.separator()
-    self.layout.operator("mesh.capify")
+    self.layout.operator(FaceCapifier.bl_idname)
+
+def object_menu_func(self, context):
+    self.layout.separator()
+    self.layout.operator(ObjectCapifier.bl_idname)
 
 def register():
-    bpy.utils.register_class(Capifier)
+    bpy.utils.register_class(FaceCapifier)
+    bpy.utils.register_class(ObjectCapifier)
+    bpy.types.VIEW3D_MT_object_specials.append(object_menu_func)
     bpy.types.VIEW3D_MT_edit_mesh_specials.append(special_menu_func)
     bpy.types.VIEW3D_MT_edit_mesh_faces.append(face_menu_func)
 
 def unregister():
     bpy.types.VIEW3D_MT_edit_mesh_specials.remove(special_menu_func)
     bpy.types.VIEW3D_MT_edit_mesh_faces.remove(face_menu_func)
-    bpy.utils.unregister_class(Capifier)
-
+    bpy.types.VIEW3D_MT_object_specials.remove(object_menu_func)
+    bpy.utils.unregister_class(ObjectCapifier)
+    bpy.utils.unregister_class(FaceCapifier)
 
 if __name__ == '__main__':
     register()
