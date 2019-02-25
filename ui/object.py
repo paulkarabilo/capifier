@@ -1,5 +1,6 @@
 import bpy
-import bmesh 
+import bmesh
+from .capify import (capify, is_cap)
 
 class ObjectCapifier(bpy.types.Operator):
     bl_idname = "object.capify"
@@ -16,4 +17,8 @@ class ObjectCapifier(bpy.types.Operator):
     def execute(self, context):
         bpy.ops.object.mode_set(mode="EDIT")
         bm = bmesh.from_edit_mesh(context.active_object.data)
+        sel = [f for f in bm.faces if is_cap(f)]
+        for f in sel:
+            capify(f, bm)
+        bpy.ops.object.mode_set(mode="OBJECT")
         return {'FINISHED'}
