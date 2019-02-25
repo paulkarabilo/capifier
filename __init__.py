@@ -15,7 +15,7 @@
 bl_info = {
     "name" : "Capifier",
     "author" : "PK",
-    "version": "0.0.2",
+    "version": (0, 0, 2),
     "description" : "Simple plugin to add proper cap quad topology to cylinders",
     "blender" : (2, 80, 0),
     "location" : "View3D > Edit Mode(Face) > Specials > Capify",
@@ -25,17 +25,17 @@ bl_info = {
 
 if "bpy" in locals():
     import importlib
-    importlib.reload(capifier)
+    importlib.reload(ui)
 else:
-    from capifier import capifier
+    from capifier import ui
 
 import bpy
 
 def register():
-    capifier.register()
+    ui.register()
 
 def unregister():
-    capifier.unregister()
+    ui.unregister()
 
 if __name__ == "__main__":
     register()
