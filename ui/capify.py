@@ -19,9 +19,9 @@ def is_cap(f):
             return False
     return True
 
-def get_sorted_verts_list(verts_seq, projected_dirvec, center):
+def get_sorted_verts_list(verts_seq, projected_dirvec, center, rotation):
     verts = verts_seq[:]
-
+    nverts = len(verts)
     #find vertice that is closest to desired direction
     vangle = 2 * pi
     vindex = 0
@@ -31,6 +31,8 @@ def get_sorted_verts_list(verts_seq, projected_dirvec, center):
             vangle = proj_angle
             vindex = i
     #rotate list, so first vert is in proper direction
+    vindex += int(rotation * nverts / 360)
+    vindex = vindex % nverts
     return verts[vindex:] + verts[:vindex]
 
 def calc_dir_vec(f):
@@ -43,7 +45,7 @@ def calc_dir_vec(f):
 
     return dirvec - norm.project(dirvec)
 
-def capify(f, bm):
+def capify(f, bm, rotation=0.0):
     verts = f.verts
     nverts = len(f.verts)
     if nverts % 8 != 0:
@@ -57,7 +59,7 @@ def capify(f, bm):
 
     center = center / nverts
 
-    verts = get_sorted_verts_list(verts, projected_dirvec, center)
+    verts = get_sorted_verts_list(verts, projected_dirvec, center, rotation)
 
     nverts2 = int(nverts / 2)
     nverts4 = int(nverts / 4)
