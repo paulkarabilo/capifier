@@ -22,14 +22,14 @@ def object_menu_func(self, context):
 def register():
     bpy.utils.register_class(FaceCapifier)
     bpy.utils.register_class(ObjectCapifier)
-    bpy.types.VIEW3D_MT_object_specials.append(object_menu_func)
-    bpy.types.VIEW3D_MT_edit_mesh_specials.append(special_menu_func)
-    bpy.types.VIEW3D_MT_edit_mesh_faces.append(face_menu_func)
+    bpy.types.VIEW3D_MT_object_context_menu.append(object_menu_func)
+    bpy.types.VIEW3D_MT_edit_mesh_context_menu.append(special_menu_func)
+    bpy.types.VIEW3D_MT_edit_mesh_faces_context_menu.append(face_menu_func)
 
 def unregister():
-    bpy.types.VIEW3D_MT_edit_mesh_specials.remove(special_menu_func)
-    bpy.types.VIEW3D_MT_edit_mesh_faces.remove(face_menu_func)
-    bpy.types.VIEW3D_MT_object_specials.remove(object_menu_func)
+    bpy.types.VIEW3D_MT_edit_mesh_context_menu.remove(special_menu_func)
+    bpy.types.VIEW3D_MT_edit_mesh_faces_context_menu.remove(face_menu_func)
+    bpy.types.VIEW3D_MT_object_context_menu.remove(object_menu_func)
     bpy.utils.unregister_class(ObjectCapifier)
     bpy.utils.unregister_class(FaceCapifier)
 
